@@ -3,7 +3,12 @@ plugins {
 }
 
 group = 'one.empty3'
-version = '1.0-SNAPSHOT'
+//name = "empty3-library-generic-sampleapp"
+version = '2023-SNAPSHOT'
+
+sourceSets {
+
+}
 
 repositories {
     google()
@@ -17,28 +22,52 @@ repositories {
     maven {
         url = uri("https://repository.sonatype.org/content/groups/public/")
     }
-    maven {
-        url = uri("https://mvnrepository.com/")
-    }
-    maven {
+
+    /*maven {
         url = uri("https://maven.scijava.org/content/repositories/public/")
-    }
-    maven {
+    }*/
+  /*  maven {
         url "https://maven.jzy3d.org/releases/"
-    }
+    }*/
     maven {
         url "https://www.jetbrains.com/intellij-repository/releases"
+    }
+    maven {
+        url = uri("https://mvnrepository.com/")
     }
     flatDir dirs: "${rootDir}/lib"
 }
 
-
 dependencies {
-    implementation("one.empty3:empty3-library-generic:2023.3.30")
+    implementation("one.empty3:empty3-library-3d:2023.5.1")
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
     useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+        }
+        resources {
+            srcDirs "src/main/resources", "src/main/java", "src/test/resources"
+        }
+    }
+
+}
+tasks.register("runMain", JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "one.empty3.Main"
+    args "arg1", "arg2"
+    dependsOn(jar)
+}
+tasks.register("runTestSunset", JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "one.empty3.sampleapp.tests.Sunset"
+    args "arg1", "arg2"
+    dependsOn(jar)
 }
